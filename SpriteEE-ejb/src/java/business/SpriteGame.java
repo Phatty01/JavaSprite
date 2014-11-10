@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package business;
 
 import java.awt.Color;
@@ -22,37 +17,23 @@ public class SpriteGame {
     public static final int HEIGHT = 500;
     public static final int WIDTH = 500;
 
-    List<Sprite> sprites;
+    List<Sprite> sprites;  // the list of Sprites in the game
     @EJB
     private SpriteFacade spriteFacade;
 
     public List getSpriteList() {
-        if (sprites != null) {
-            return sprites;
-        } else {
-            return null;
-        }
+        return sprites;
     }
-
-    //method for creating a new sprite
 
     public void newSprite(MouseEvent event, Color color) {
-        Sprite sprite = new Sprite(HEIGHT, WIDTH, color);
+        Sprite newSprite = new Sprite(HEIGHT, WIDTH, color);
         if (sprites != null) {
             synchronized (sprites) {
-                sprites.add(sprite);
+                sprites.add(newSprite);
             }
         }
-        spriteFacade.create(sprite);
+        spriteFacade.create(newSprite);
         System.out.println("New sprite created");
-    }
-
-    public int getHeight() {
-        return HEIGHT;
-    }
-
-    public int getWidth() {
-        return WIDTH;
     }
 
     @PostConstruct
@@ -73,7 +54,7 @@ public class SpriteGame {
                     }
                     //sleep while waiting to display the next frame of the animation
                     try {
-                        Thread.sleep(400);  // wake up roughly 25 frames per second
+                        Thread.sleep(100);  // wake up roughly 10 frames per second
                     } catch (InterruptedException exception) {
                         exception.printStackTrace();
                     }
