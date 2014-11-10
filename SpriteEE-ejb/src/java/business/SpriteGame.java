@@ -18,8 +18,7 @@ import javax.ejb.Stateless;
  *
  * @author tgk
  */
-@Stateless
-@LocalBean
+@Singleton
 public class SpriteGame {
 
     public static final int HEIGHT = 500;
@@ -29,13 +28,6 @@ public class SpriteGame {
     @EJB
     private SpriteFacade spriteFacade;
 
-    public SpriteGame (){
-        new Thread(new Runnable(){
-            public void run(){
-                go();
-            }
-        }).start();
-    }
     public List getSpriteList() {
         if (sprites != null) {
             return sprites;
@@ -51,6 +43,7 @@ public class SpriteGame {
         //    synchronized (sprites) {
                 sprites.add(sprite);
                 spriteFacade.create(sprite);
+                //sprites = spriteFacade.findAll();
         //    }
         }
         System.out.println("New sprite created");
@@ -63,9 +56,11 @@ public class SpriteGame {
     public int getWidth() {
         return WIDTH;
     }
-    //@PostConstruct
+    @PostConstruct
     public void go() {
-
+    new Thread(new Runnable (){
+        public void run(){
+ 
 		//retrieve the sprites from the database
         sprites = spriteFacade.findAll();
 
@@ -85,5 +80,9 @@ public class SpriteGame {
                 exception.printStackTrace();
             }
         }
+    }
+                   
+      
+    }).start();
     }
 }
