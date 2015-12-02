@@ -27,11 +27,6 @@ public class SpriteGame {
 
     public void newSprite(MouseEvent event, Color color) {
         Sprite newSprite = new Sprite(HEIGHT, WIDTH, color);
-        if (sprites != null) {
-            synchronized (sprites) {
-                sprites.add(newSprite);
-            }
-        }
         spriteFacade.create(newSprite);
         System.out.println("New sprite created");
     }
@@ -41,16 +36,12 @@ public class SpriteGame {
         new Thread(new Runnable() {
             public void run() {
 
-                //retrieve the sprites from the database
-                sprites = spriteFacade.findAll();
-
                 while (true) {
                     //move all the sprites and update them in the database
-                    synchronized (sprites) {
-                        for (Sprite sprite : sprites) {
-                            sprite.move();
-                            spriteFacade.edit(sprite);
-                        }
+                    sprites = spriteFacade.findAll();
+                    for (Sprite sprite : sprites) {
+                        sprite.move();
+                        spriteFacade.edit(sprite);
                     }
                     //sleep while waiting to display the next frame of the animation
                     try {
